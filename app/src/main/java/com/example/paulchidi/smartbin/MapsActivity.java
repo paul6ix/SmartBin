@@ -54,9 +54,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LatLng maryBin = new LatLng(6.671766, 3.157018);
         LatLng ubaBin = new LatLng(6.671851, 3.155241);
         LatLng mallBin = new LatLng(6.670267, 3.157897);
+        LatLng cafe1Bin = new LatLng(6.669334, 3.153195);
         mMap.addMarker(new MarkerOptions().position(maryBin).icon(BitmapDescriptorFactory.fromResource(R.drawable.sgreen_bin)).title("Mary Hall Bin"));
         mMap.addMarker(new MarkerOptions().position(ubaBin).icon(BitmapDescriptorFactory.fromResource(R.drawable.sred_bin)).title("Uba Bin"));
         mMap.addMarker(new MarkerOptions().position(mallBin).icon(BitmapDescriptorFactory.fromResource(R.drawable.syellow_bin)).title("shopping Hall Bin"));
+        mMap.addMarker(new MarkerOptions().position(cafe1Bin).icon(BitmapDescriptorFactory.fromResource(R.drawable.syellow_bin)).title("cafeteria 1 Bin"));
 
     }
 }
