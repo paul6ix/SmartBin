@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -17,12 +18,19 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
     //All declaration for the map
     private GoogleMap mMap;
     public String url = "https://smart-bin-app.herokuapp.com/";
+    // Bin coordinates -----------------------------------------------
+    LatLng maryBin = new LatLng(6.671766, 3.157018);
+    LatLng ubaBin = new LatLng(6.671851, 3.155241);
+    LatLng mallBin = new LatLng(6.670267, 3.157897);
+    LatLng cafe1Bin = new LatLng(6.669334, 3.153195);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,12 +59,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void binMarkers() {
-        LatLng maryBin = new LatLng(6.671766, 3.157018);
-        LatLng ubaBin = new LatLng(6.671851, 3.155241);
-        LatLng mallBin = new LatLng(6.670267, 3.157897);
-        LatLng cafe1Bin = new LatLng(6.669334, 3.153195);
+
         MarkerOptions mapOptions = new MarkerOptions();
-        mapOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.sgreen_bin));
         String status = "medium";
 
         if (status == "high") {
@@ -93,6 +97,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         }
                         else if(which==1){
                             Toast.makeText(getApplicationContext(),"Plotting Route",Toast.LENGTH_LONG).show();
+                            Polyline line = mMap.addPolyline(new PolylineOptions().add(ubaBin,cafe1Bin).width(5).color(Color.BLUE) );
                         }
 
                     }
