@@ -36,7 +36,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     //All declaration for the map
     private GoogleMap mMap;
     private static final String apiUrl = "https://smart-bin-app.herokuapp.com/";
-    private static final String consoleLog = "Data";
+    private static final String consoleLog = " Error Data";
     // Bin coordinates -----------------------------------------------
     LatLng maryBin = new LatLng(6.671766, 3.157018);
     LatLng ubaBin = new LatLng(6.671851, 3.155241);
@@ -61,7 +61,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         LatLngBounds bounds = new LatLngBounds(new LatLng(6.563810, 3.065035), new LatLng(6.674764, 3.252332));
         LatLng cu = new LatLng(6.671310, 3.158175);
-        mMap.addMarker(new MarkerOptions().position(cu).title("Marker in Covenant university"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(cu));
         mMap.moveCamera(CameraUpdateFactory.zoomTo(15f));
         mMap.setLatLngBoundsForCameraTarget(bounds);
@@ -85,14 +84,14 @@ setupMap();
         mMap.addMarker(new MarkerOptions().position(ubaBin).icon(BitmapDescriptorFactory.fromResource(R.drawable.sred_bin)).title("Uba Bin"));
         mMap.addMarker(new MarkerOptions().position(mallBin).icon(BitmapDescriptorFactory.fromResource(R.drawable.syellow_bin)).title("shopping Hall Bin"));
         mMap.addMarker(new MarkerOptions().position(cafe1Bin).icon(BitmapDescriptorFactory.fromResource(R.drawable.sred_bin)).title("cafeteria 1 Bin"));
-        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+      /*  mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
                 onCreateDialog();
 
-                return false;
+                return true;
             }
-        });
+        });*/
     }
 
 
@@ -179,13 +178,24 @@ setupMap();
         JSONArray jsonArray = new JSONArray(json);
         for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject jsonObject = jsonArray.getJSONObject(i);
-            mMap.addMarker(new MarkerOptions()
+            MarkerOptions jsonMarkers =  new MarkerOptions();
+            jsonMarkers.snippet(jsonObject.getString("status"));
+            if (jsonMarkers.getSnippet().equalsIgnoreCase("low")){
+                jsonMarkers.icon(BitmapDescriptorFactory.fromResource(R.drawable.sgreen_bin));
+            }
+            else if (jsonMarkers.getSnippet().equalsIgnoreCase("medium")){
+                jsonMarkers.icon(BitmapDescriptorFactory.fromResource(R.drawable.syellow_bin));
+            }
+            else if (jsonMarkers.getSnippet().equalsIgnoreCase("high")){
+                jsonMarkers.icon(BitmapDescriptorFactory.fromResource(R.drawable.sred_bin));
+            }
+            mMap.addMarker(jsonMarkers
                     .title(jsonObject.getString("name"))
-                    .snippet(jsonObject.getString("status"))
                     .position(new LatLng(
-                            jsonObject.getJSONArray("coordinates").getDouble(0),
-                            jsonObject.getJSONArray("coordinates").getDouble(1)
+                            jsonObject.getJSONArray("LatLng").getDouble(0),
+                            jsonObject.getJSONArray("LatLng").getDouble(1)
                     )));
+
         }
 
     }
