@@ -69,29 +69,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void binMarkers() {
-setupMap();
-
-        MarkerOptions mapOptions = new MarkerOptions();
-        String status = "medium";
-
-        if (status == "high") {
-            mapOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.sred_bin));
-
-        } else if (status == "medium") {
-            mapOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.syellow_bin));
-        }
-        mMap.addMarker(mapOptions.title("Map option testing").position(maryBin));
+        setupMap();
+        //Hardcoded maps for offline activity
+        mMap.addMarker(new MarkerOptions().title("Map option testing").position(maryBin).icon(BitmapDescriptorFactory.fromResource(R.drawable.sgreen_bin)));
         mMap.addMarker(new MarkerOptions().position(ubaBin).icon(BitmapDescriptorFactory.fromResource(R.drawable.sred_bin)).title("Uba Bin"));
         mMap.addMarker(new MarkerOptions().position(mallBin).icon(BitmapDescriptorFactory.fromResource(R.drawable.syellow_bin)).title("shopping Hall Bin"));
         mMap.addMarker(new MarkerOptions().position(cafe1Bin).icon(BitmapDescriptorFactory.fromResource(R.drawable.sred_bin)).title("cafeteria 1 Bin"));
-      /*  mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker) {
-                onCreateDialog();
-
-                return true;
-            }
-        });*/
     }
 
 
@@ -121,14 +104,15 @@ setupMap();
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-    public void setupMap(){
+
+    public void setupMap() {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                try{
+                try {
                     retrieveData();
-                } catch (IOException e){
-                    Log.e(consoleLog,"Cannot retrieve map data");
+                } catch (IOException e) {
+                    Log.e(consoleLog, "Cannot retrieve map data");
                     return;
                 }
             }
@@ -165,6 +149,7 @@ setupMap();
             @Override
             public void run() {
                 try {
+                    //Running markers in thread incase of no available data the app wont crash
                     makeMarkers(json.toString());
 
                 } catch (JSONException e) {
@@ -175,26 +160,37 @@ setupMap();
     }
 
     void makeMarkers(String json) throws JSONException {
+        //Pulling Json markers data from api array and looping through each item
         JSONArray jsonArray = new JSONArray(json);
         for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject jsonObject = jsonArray.getJSONObject(i);
-            MarkerOptions jsonMarkers =  new MarkerOptions();
+            //Declaring the markers option
+            final MarkerOptions jsonMarkers = new MarkerOptions();
+            //Setting markers color based on snippet type
             jsonMarkers.snippet(jsonObject.getString("status"));
-            if (jsonMarkers.getSnippet().equalsIgnoreCase("low")){
+            if (jsonMarkers.getSnippet().equalsIgnoreCase("low")) {
                 jsonMarkers.icon(BitmapDescriptorFactory.fromResource(R.drawable.sgreen_bin));
-            }
-            else if (jsonMarkers.getSnippet().equalsIgnoreCase("medium")){
+            } else if (jsonMarkers.getSnippet().equalsIgnoreCase("medium")) {
                 jsonMarkers.icon(BitmapDescriptorFactory.fromResource(R.drawable.syellow_bin));
-            }
-            else if (jsonMarkers.getSnippet().equalsIgnoreCase("high")){
+            } else if (jsonMarkers.getSnippet().equalsIgnoreCase("high")) {
                 jsonMarkers.icon(BitmapDescriptorFactory.fromResource(R.drawable.sred_bin));
             }
+            //creating the markers
             mMap.addMarker(jsonMarkers
                     .title(jsonObject.getString("name"))
                     .position(new LatLng(
                             jsonObject.getJSONArray("LatLng").getDouble(0),
                             jsonObject.getJSONArray("LatLng").getDouble(1)
                     )));
+            mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                @Override
+                public boolean onMarkerClick(Marker marker) {
+                    if (marker.getSnippet().equalsIgnoreCase("high")) {
+                        onCreateDialog();
+                    }
+                    return false;
+                }
+            });
 
         }
 
