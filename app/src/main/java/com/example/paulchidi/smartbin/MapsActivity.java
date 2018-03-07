@@ -52,10 +52,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        // setting floating action button
         fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //refreshing map view  and Re-centering everything
                 LatLng cu = new LatLng(6.671310, 3.158175);
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(cu, 15.5f));
                 setupMap();
@@ -67,6 +69,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        //Map setup and offline markers generation
         mMap = googleMap;
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         LatLngBounds bounds = new LatLngBounds(new LatLng(6.563810, 3.065035), new LatLng(6.674764, 3.252332));
