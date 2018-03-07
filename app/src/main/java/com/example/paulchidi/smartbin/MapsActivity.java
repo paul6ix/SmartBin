@@ -1,13 +1,13 @@
 package com.example.paulchidi.smartbin;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -33,15 +33,16 @@ import java.net.URL;
 
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
-    //All declaration for the map
-    private GoogleMap mMap;
     private static final String apiUrl = "https://smart-bin-app.herokuapp.com/";
     private static final String consoleLog = " Error Data";
-    // Bin coordinates -----------------------------------------------
+    // Bin offline coordinates -----------------------------------------------
     LatLng maryBin = new LatLng(6.671766, 3.157018);
-    LatLng ubaBin = new LatLng(6.671851, 3.155241);
+    LatLng EagleSquareBin = new LatLng(6.670954, 3.154785);
     LatLng mallBin = new LatLng(6.670267, 3.157897);
     LatLng cafe1Bin = new LatLng(6.669334, 3.153195);
+    FloatingActionButton fab;
+    //All declaration for the map
+    private GoogleMap mMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +52,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LatLng cu = new LatLng(6.671310, 3.158175);
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(cu, 15.5f));
+                setupMap();
+            }
+        });
 
 
     }
@@ -71,10 +81,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void binMarkers() {
         setupMap();
         //Hardcoded maps for offline activity
-        mMap.addMarker(new MarkerOptions().title("Map option testing").position(maryBin).icon(BitmapDescriptorFactory.fromResource(R.drawable.sgreen_bin)));
-        mMap.addMarker(new MarkerOptions().position(ubaBin).icon(BitmapDescriptorFactory.fromResource(R.drawable.sred_bin)).title("Uba Bin"));
-        mMap.addMarker(new MarkerOptions().position(mallBin).icon(BitmapDescriptorFactory.fromResource(R.drawable.syellow_bin)).title("shopping Hall Bin"));
-        mMap.addMarker(new MarkerOptions().position(cafe1Bin).icon(BitmapDescriptorFactory.fromResource(R.drawable.sred_bin)).title("cafeteria 1 Bin"));
+        mMap.addMarker(new MarkerOptions().title("Map option testing").position(maryBin).icon(BitmapDescriptorFactory.fromResource(R.drawable.sgreen_bin)).snippet("low"));
+        mMap.addMarker(new MarkerOptions().position(EagleSquareBin).icon(BitmapDescriptorFactory.fromResource(R.drawable.sred_bin)).title("Eagle Square Bin").snippet("high"));
+        mMap.addMarker(new MarkerOptions().position(mallBin).icon(BitmapDescriptorFactory.fromResource(R.drawable.syellow_bin)).title("shopping Hall Bin").snippet("medium"));
+        mMap.addMarker(new MarkerOptions().position(cafe1Bin).icon(BitmapDescriptorFactory.fromResource(R.drawable.sred_bin)).title("cafeteria 1 Bin").snippet("high"));
     }
 
 
@@ -90,7 +100,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                         } else if (which == 1) {
                             Toast.makeText(getApplicationContext(), "Plotting Route", Toast.LENGTH_LONG).show();
-                            Polyline line = mMap.addPolyline(new PolylineOptions().add(ubaBin, cafe1Bin).width(5).color(Color.BLUE));
+                            Polyline line = mMap.addPolyline(new PolylineOptions().add(EagleSquareBin, cafe1Bin).width(5).color(Color.BLUE));
                         }
 
                     }
