@@ -58,9 +58,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View v) {
                 //refreshing map view  and Re-centering everything
+
+                finish();
+                overridePendingTransition(0, 0);
+                startActivity(getIntent());
+                overridePendingTransition(0, 0);
                 LatLng cu = new LatLng(6.671310, 3.158175);
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(cu, 15.5f));
-                setupMap();
             }
         });
 
@@ -103,7 +107,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                         } else if (which == 1) {
                             Toast.makeText(getApplicationContext(), "Plotting Route", Toast.LENGTH_LONG).show();
-                            Polyline line = mMap.addPolyline(new PolylineOptions().add(EagleSquareBin, cafe1Bin).width(5).color(Color.BLUE));
+                            Polyline line = mMap.addPolyline(new PolylineOptions().add(EagleSquareBin, cafe1Bin, new LatLng(6.671812,
+                                    3.152626)).width(5).color(Color.BLUE));
                         }
 
                     }
@@ -200,6 +205,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 public boolean onMarkerClick(Marker marker) {
                     if (marker.getSnippet().equalsIgnoreCase("high")) {
                         onCreateDialog();
+
                     }
                     return false;
                 }
