@@ -33,7 +33,7 @@ import java.net.URL;
 
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
-    private static final String apiUrl = "https://smart-bin-app.herokuapp.com/";
+    private static final String apiUrl = "https://cu-waste-management-app.herokuapp.com/";
     private static final String consoleLog = " Error Data";
     // Bin offline coordinates -----------------------------------------------
     LatLng maryBin = new LatLng(6.671766, 3.157018);
@@ -108,7 +108,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         } else if (which == 1) {
                             Toast.makeText(getApplicationContext(), "Plotting Route", Toast.LENGTH_LONG).show();
                             Polyline line = mMap.addPolyline(new PolylineOptions().add(EagleSquareBin, cafe1Bin, new LatLng(6.671812,
-                                    3.152626)).width(5).color(Color.BLUE));
+                                    3.152626), new LatLng(6.671812,
+                                    3.152626), new LatLng(6.670576,
+                                    3.15401), new LatLng(6.670512,
+                                    3.157218), new LatLng(6.671868,
+                                    3.155168), new LatLng(6.668149,
+                                    3.155404)).width(5).color(Color.BLUE));
                         }
 
                     }
@@ -167,7 +172,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void run() {
                 try {
-                    //Running markers in thread incase of no available data the app wont crash
+                    //Running markers in thread in case of no available data the app wont crash
                     makeMarkers(json.toString());
 
                 } catch (JSONException e) {
